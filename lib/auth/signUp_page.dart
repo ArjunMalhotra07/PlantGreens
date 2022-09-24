@@ -56,7 +56,10 @@ class _SignUpPageState extends State<SignUpPage> {
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-        prefixIconColor: Colors.green,
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.green, width: 2.0),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
         prefixIcon: const Icon(Icons.person),
         contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         hintText: "Name",
@@ -83,6 +86,10 @@ class _SignUpPageState extends State<SignUpPage> {
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.green, width: 2.0),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
         prefixIcon: const Icon(Icons.email_rounded),
         contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         hintText: "Email",
@@ -109,6 +116,10 @@ class _SignUpPageState extends State<SignUpPage> {
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.green, width: 2.0),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
         prefixIcon: const Icon(Icons.key),
         contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         hintText: "Passcode",
@@ -131,6 +142,10 @@ class _SignUpPageState extends State<SignUpPage> {
       },
       textInputAction: TextInputAction.done,
       decoration: InputDecoration(
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.green, width: 2.0),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
         prefixIcon: const Icon(Icons.key),
         contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         hintText: "Confirm Passcode",
@@ -196,7 +211,7 @@ class _SignUpPageState extends State<SignUpPage> {
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back,
-            color: Colors.blue,
+            color: Colors.green,
           ),
           onPressed: () {
             Navigator.pushReplacement(

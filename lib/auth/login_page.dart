@@ -52,6 +52,10 @@ class _LoginPageState extends State<LoginPage> {
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.green, width: 2.0),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
           prefixIcon: const Icon(Icons.mail),
           contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Email",
@@ -80,6 +84,10 @@ class _LoginPageState extends State<LoginPage> {
       },
       textInputAction: TextInputAction.done,
       decoration: InputDecoration(
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.green, width: 2.0),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
         prefixIcon: const Icon(Icons.key),
         contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         hintText: "Passcode",

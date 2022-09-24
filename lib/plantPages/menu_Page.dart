@@ -2,9 +2,6 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:inheritedwidget/pageView/newPage.dart';
-import 'package:inheritedwidget/pageView/page1.dart';
-import 'package:inheritedwidget/pageView/page2.dart';
-import 'package:inheritedwidget/pageView/page3.dart';
 import '../auth/login_page.dart';
 import 'details_Page.dart';
 
@@ -70,7 +67,7 @@ class _MenuPageState extends State<MenuPage> {
     var width = MediaQuery.of(context).size.width;
     return Container(
       decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(50)),
+        // borderRadius: BorderRadius.only(bottomLeft: Radius.circular(50)),
         color: Color.fromARGB(255, 87, 141, 72),
       ),
       height: height,
