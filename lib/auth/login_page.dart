@@ -17,11 +17,14 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   var _timer;
   @override
   Widget build(BuildContext context) {
+    final ThemeData themeData = Theme.of(context);
+
     const logo = CircleAvatar(
       radius: 105,
       backgroundColor: Colors.green,
@@ -30,70 +33,100 @@ class _LoginPageState extends State<LoginPage> {
         radius: 100,
       ),
     );
-    final emailField = TextFormField(
-        autofocus: false,
-        controller: emailController,
-        keyboardType: TextInputType.emailAddress,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return ("Please Enter Your Email");
-          }
-          if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-                  .hasMatch(value) ||
-              !EmailValidator.validate(value)) {
-            return ("Please Enter a valid email");
-          }
-          return null;
-        },
-        inputFormatters: inputFormatters(),
-        onSaved: (value) {
-          emailController.text = value!;
-        },
-        textInputAction: TextInputAction.next,
-        decoration: InputDecoration(
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.green, width: 2.0),
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          prefixIcon: const Icon(Icons.mail),
-          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Email",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+    final emailField = Theme(
+        data: themeData.copyWith(
+            inputDecorationTheme: themeData.inputDecorationTheme.copyWith(
+          prefixIconColor:
+              MaterialStateColor.resolveWith((Set<MaterialState> states) {
+            if (states.contains(MaterialState.focused)) {
+              return Colors.green;
+            }
+            if (states.contains(MaterialState.error)) {
+              return Colors.red;
+            }
+            return Colors.grey;
+          }),
+        )),
+        child: TextFormField(
+            cursorColor: Colors.grey,
+            autofocus: false,
+            controller: emailController,
+            keyboardType: TextInputType.emailAddress,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return ("Please Enter Your Email");
+              }
+              if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                      .hasMatch(value) ||
+                  !EmailValidator.validate(value)) {
+                return ("Please Enter a valid email");
+              }
+              return null;
+            },
+            inputFormatters: inputFormatters(),
+            onSaved: (value) {
+              emailController.text = value!;
+            },
+            textInputAction: TextInputAction.next,
+            decoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.green, width: 2.0),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              prefixIcon: const Icon(Icons.mail),
+              contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+              hintText: "Email",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            )));
+    final passwordField = Theme(
+        data: themeData.copyWith(
+            inputDecorationTheme: themeData.inputDecorationTheme.copyWith(
+          prefixIconColor:
+              MaterialStateColor.resolveWith((Set<MaterialState> states) {
+            if (states.contains(MaterialState.focused)) {
+              return Colors.green;
+            }
+            if (states.contains(MaterialState.error)) {
+              return Colors.red;
+            }
+            return Colors.grey;
+          }),
+        )),
+        child: TextFormField(
+          autofocus: false,
+          cursorColor: Colors.grey,
+          controller: passwordController,
+          obscureText: true,
+          inputFormatters: inputFormatters(),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: (value) {
+            RegExp regex = RegExp(r'^.{6,}$');
+            if (value!.isEmpty) {
+              return ("Please enter a password");
+            }
+            if (!regex.hasMatch(value)) {
+              return ("Minimum of six characters Required");
+            }
+            return null;
+          },
+          onSaved: (value) {
+            passwordController.text = value!;
+          },
+          textInputAction: TextInputAction.done,
+          decoration: InputDecoration(
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.green, width: 2.0),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            prefixIcon: const Icon(Icons.key),
+            contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+            hintText: "Passcode",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ));
-    final passwordField = TextFormField(
-      autofocus: false,
-      controller: passwordController,
-      obscureText: true,
-      inputFormatters: inputFormatters(),
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: (value) {
-        RegExp regex = RegExp(r'^.{6,}$');
-        if (value!.isEmpty) {
-          return ("Please enter a password");
-        }
-        if (!regex.hasMatch(value)) {
-          return ("Minimum of six characters Required");
-        }
-        return null;
-      },
-      onSaved: (value) {
-        passwordController.text = value!;
-      },
-      textInputAction: TextInputAction.done,
-      decoration: InputDecoration(
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.green, width: 2.0),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        prefixIcon: const Icon(Icons.key),
-        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "Passcode",
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
     final signIn = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(30),

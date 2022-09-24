@@ -18,7 +18,6 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   var _timer;
-  final messengerKey = GlobalKey<ScaffoldMessengerState>();
   // Editing Controllers
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -27,6 +26,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData themeData = Theme.of(context);
     const signUpLogo = CircleAvatar(
       radius: 102,
       backgroundColor: Colors.green,
@@ -35,123 +35,184 @@ class _SignUpPageState extends State<SignUpPage> {
         radius: 100,
       ),
     );
-    final nameField = TextFormField(
-      autofocus: false,
-      controller: nameController,
-      keyboardType: TextInputType.name,
-      inputFormatters: inputFormatters(),
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: (value) {
-        RegExp regex = RegExp(r'^.{3,}$');
-        if (value!.isEmpty) {
-          return ("Name can't be empty");
-        }
-        if (!regex.hasMatch(value)) {
-          return ("Minimum of 3 characters Required");
-        }
-        return null;
-      },
-      onSaved: (value) {
-        nameController.text = value!;
-      },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.green, width: 2.0),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        prefixIcon: const Icon(Icons.person),
-        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "Name",
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
-    final emailField = TextFormField(
-      autofocus: false,
-      controller: emailController,
-      keyboardType: TextInputType.name,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: (value) {
-        if (value!.isEmpty) {
-          return ("Please Enter Your Email");
-        }
-        if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value) ||
-            !EmailValidator.validate(value)) {
-          return ("Please Enter a valid email");
-        }
-        return null;
-      },
-      onSaved: (value) {
-        emailController.text = value!;
-      },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.green, width: 2.0),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        prefixIcon: const Icon(Icons.email_rounded),
-        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "Email",
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
-    final passwordField = TextFormField(
-      autofocus: false,
-      controller: passwordController,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      obscureText: true,
-      validator: (value) {
-        RegExp regex = RegExp(r'^.{6,}$');
-        if (value!.isEmpty) {
-          return ("Password can't be empty");
-        }
-        if (!regex.hasMatch(value)) {
-          return ("Minimum 6 characters Required");
-        }
-        return null;
-      },
-      onSaved: (value) {
-        passwordController.text = value!;
-      },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.green, width: 2.0),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        prefixIcon: const Icon(Icons.key),
-        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "Passcode",
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
-    final cpasswordField = TextFormField(
-      autofocus: false,
-      controller: cpasswordController,
-      obscureText: true,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: (value) {
-        if (passwordController.text != cpasswordController.text) {
-          return ("Passcode doesn't match");
-        }
-        return null;
-      },
-      onSaved: (value) {
-        cpasswordController.text = value!;
-      },
-      textInputAction: TextInputAction.done,
-      decoration: InputDecoration(
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.green, width: 2.0),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        prefixIcon: const Icon(Icons.key),
-        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-        hintText: "Confirm Passcode",
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
+    final nameField = Theme(
+        data: themeData.copyWith(
+            inputDecorationTheme: themeData.inputDecorationTheme.copyWith(
+          prefixIconColor:
+              MaterialStateColor.resolveWith((Set<MaterialState> states) {
+            if (states.contains(MaterialState.focused)) {
+              return Colors.green;
+            }
+            if (states.contains(MaterialState.error)) {
+              return Colors.red;
+            }
+            return Colors.grey;
+          }),
+        )),
+        child: TextFormField(
+          autofocus: false,
+          cursorColor: Colors.grey,
+          controller: nameController,
+          keyboardType: TextInputType.name,
+          inputFormatters: inputFormatters(),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: (value) {
+            RegExp regex = RegExp(r'^.{3,}$');
+            if (value!.isEmpty) {
+              return ("Name can't be empty");
+            }
+            if (!regex.hasMatch(value)) {
+              return ("Minimum of 3 characters Required");
+            }
+            return null;
+          },
+          onSaved: (value) {
+            nameController.text = value!;
+          },
+          textInputAction: TextInputAction.next,
+          decoration: InputDecoration(
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.green, width: 2.0),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            prefixIcon: const Icon(Icons.person),
+            contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+            hintText: "Name",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ));
+    final emailField = Theme(
+        data: themeData.copyWith(
+            inputDecorationTheme: themeData.inputDecorationTheme.copyWith(
+          prefixIconColor:
+              MaterialStateColor.resolveWith((Set<MaterialState> states) {
+            if (states.contains(MaterialState.focused)) {
+              return Colors.green;
+            }
+            if (states.contains(MaterialState.error)) {
+              return Colors.red;
+            }
+            return Colors.grey;
+          }),
+        )),
+        child: TextFormField(
+          autofocus: false,
+          cursorColor: Colors.grey,
+          controller: emailController,
+          keyboardType: TextInputType.name,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return ("Please Enter Your Email");
+            }
+            if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                    .hasMatch(value) ||
+                !EmailValidator.validate(value)) {
+              return ("Please Enter a valid email");
+            }
+            return null;
+          },
+          onSaved: (value) {
+            emailController.text = value!;
+          },
+          textInputAction: TextInputAction.next,
+          decoration: InputDecoration(
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.green, width: 2.0),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            prefixIcon: const Icon(Icons.email_rounded),
+            contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+            hintText: "Email",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ));
+    final passwordField = Theme(
+        data: themeData.copyWith(
+            inputDecorationTheme: themeData.inputDecorationTheme.copyWith(
+          prefixIconColor:
+              MaterialStateColor.resolveWith((Set<MaterialState> states) {
+            if (states.contains(MaterialState.focused)) {
+              return Colors.green;
+            }
+            if (states.contains(MaterialState.error)) {
+              return Colors.red;
+            }
+            return Colors.grey;
+          }),
+        )),
+        child: TextFormField(
+          autofocus: false,
+          cursorColor: Colors.grey,
+          controller: passwordController,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          obscureText: true,
+          validator: (value) {
+            RegExp regex = RegExp(r'^.{6,}$');
+            if (value!.isEmpty) {
+              return ("Password can't be empty");
+            }
+            if (!regex.hasMatch(value)) {
+              return ("Minimum 6 characters Required");
+            }
+            return null;
+          },
+          onSaved: (value) {
+            passwordController.text = value!;
+          },
+          textInputAction: TextInputAction.next,
+          decoration: InputDecoration(
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.green, width: 2.0),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            prefixIcon: const Icon(Icons.key),
+            contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+            hintText: "Passcode",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ));
+    final cpasswordField = Theme(
+        data: themeData.copyWith(
+            inputDecorationTheme: themeData.inputDecorationTheme.copyWith(
+          prefixIconColor:
+              MaterialStateColor.resolveWith((Set<MaterialState> states) {
+            if (states.contains(MaterialState.focused)) {
+              return Colors.green;
+            }
+            if (states.contains(MaterialState.error)) {
+              return Colors.red;
+            }
+            return Colors.grey;
+          }),
+        )),
+        child: TextFormField(
+          autofocus: false,
+          cursorColor: Colors.grey,
+          controller: cpasswordController,
+          obscureText: true,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: (value) {
+            if (passwordController.text != cpasswordController.text) {
+              return ("Passcode doesn't match");
+            }
+            return null;
+          },
+          onSaved: (value) {
+            cpasswordController.text = value!;
+          },
+          textInputAction: TextInputAction.done,
+          decoration: InputDecoration(
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.green, width: 2.0),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            prefixIcon: const Icon(Icons.key),
+            contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+            hintText: "Confirm Passcode",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ));
     final signUpButton = Material(
       elevation: 0,
       borderRadius: BorderRadius.circular(30),
