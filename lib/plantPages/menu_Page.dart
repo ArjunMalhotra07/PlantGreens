@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:inheritedwidget/pageView/newPage.dart';
@@ -14,11 +15,24 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  final _controller = PageController();
+  final CollectionReference _collectionRef =
+      FirebaseFirestore.instance.collection('plantGreens');
+
+  Future<void> getData() async {
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await _collectionRef.get();
+    // Get data from docs and convert map to List
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    print(allData);
+    print(allData[0]);
+    print(allData[1]);
+    // print(querySnapshot.docs);
+  }
 
   int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
+    getData();
     return Scaffold(
       appBar: AppBar(
         leadingWidth: MediaQuery.of(context).size.width * .25,
@@ -50,12 +64,12 @@ class _MenuPageState extends State<MenuPage> {
         children: [
           Row(children: [
             left(),
-            selectedIndex == 0
-                ? GreenPlants()
-                : selectedIndex == 1
-                    ? IndoorPlants()
-                    : ShapeClose()
-            // GreenPlants()
+            // selectedIndex == 0
+            //     ? GreenPlants()
+            //     : selectedIndex == 1
+            //         ? IndoorPlants()
+            //         : ShapeClose()
+            GreenPlants()
           ]),
         ],
       ),
