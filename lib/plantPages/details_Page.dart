@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:inheritedwidget/pageView/page1.dart';
 import 'package:inheritedwidget/pageView/page2.dart';
 import 'package:inheritedwidget/pageView/page3.dart';
@@ -31,112 +32,118 @@ class _DetailsPageState extends State<DetailsPage> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          leading: Padding(
-            padding: EdgeInsets.only(left: 20.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: const Icon(
-                Icons.arrow_back,
-                color: Colors.black,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+      ),
+      child: Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.white,
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                ),
               ),
             ),
+            actions: const [
+              Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: Icon(
+                  Icons.shopping_cart_outlined,
+                  color: Colors.black,
+                ),
+              )
+            ],
           ),
-          actions: const [
-            Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: Icon(
-                Icons.shopping_cart_outlined,
-                color: Colors.black,
-              ),
-            )
-          ],
-        ),
-        body: Stack(
-          children: [
-            // Child 1: Actual Page
-            PageView(
-              // 4 pages -- Plant Description, 3 Test Pages
-              scrollDirection: Axis.vertical,
-              controller: _controller,
-              children: [
-                // Child 1: Plant Desciption Page
-                Stack(
-                  children: [
-                    // Child 1: White Background
-                    Container(
-                      height: height,
-                      width: width,
-                      color: Colors.white,
-                    ),
-                    // Child 2: Green Drawing
-                    SizedBox(
-                      height: height / 1.5,
-                      width: width,
-                      child: CustomPaint(
-                        painter: CurvePainter(height: height, width: width),
+          body: Stack(
+            children: [
+              // Child 1: Actual Page
+              PageView(
+                // 4 pages -- Plant Description, 3 Test Pages
+                scrollDirection: Axis.vertical,
+                controller: _controller,
+                children: [
+                  // Child 1: Plant Desciption Page
+                  Stack(
+                    children: [
+                      // Child 1: White Background
+                      Container(
+                        height: height,
+                        width: width,
+                        color: Colors.white,
                       ),
-                    ),
-                    // Child 3: Plant Details
-                    details(),
-                    // Child 4: Row in bottom
-                    Padding(
-                      padding: EdgeInsets.only(top: height * .7),
-                      child: Column(
-                        children: [
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                bottomInformationRow('assets/scale.png',
-                                    "Height", "40cm - 50cm"),
-                                bottomInformationRow(
-                                    'assets/thermo.png',
-                                    "Temperature",
-                                    "18" + "\u2103" + " to 25" + "\u2103"),
-                                bottomInformationRow('assets/pot.png', "Pot",
-                                    "Self Watering Pot"),
-                              ]),
-                        ],
+                      // Child 2: Green Drawing
+                      SizedBox(
+                        height: height / 1.5,
+                        width: width,
+                        child: CustomPaint(
+                          painter: CurvePainter(height: height, width: width),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                // Child 1: Test Page 1
-                Page1(),
-                // Child 2: Test Page 2
-                Page2(),
-                // Child 3: Test Page 3
-                Page3()
-              ],
-            ),
-            // Child 2: The Vertical carousel Indicator
-            Padding(
-              padding: EdgeInsets.only(
-                top: height * .43,
-                left: width * .05,
+                      // Child 3: Plant Details
+                      details(),
+                      // Child 4: Row in bottom
+                      Padding(
+                        padding: EdgeInsets.only(top: height * .7),
+                        child: Column(
+                          children: [
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  bottomInformationRow('assets/scale.png',
+                                      "Height", "40cm - 50cm"),
+                                  bottomInformationRow(
+                                      'assets/thermo.png',
+                                      "Temperature",
+                                      "18" + "\u2103" + " to 25" + "\u2103"),
+                                  bottomInformationRow('assets/pot.png', "Pot",
+                                      "Self Watering Pot"),
+                                ]),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  // Child 1: Test Page 1
+                  Page1(),
+                  // Child 2: Test Page 2
+                  Page2(),
+                  // Child 3: Test Page 3
+                  Page3()
+                ],
               ),
-              child: Transform.rotate(
-                angle: pi / 2,
-                child: SmoothPageIndicator(
-                  controller: _controller,
-                  count: 4,
-                  effect: const ExpandingDotsEffect(
-                      activeDotColor: Color.fromARGB(255, 100, 161, 73),
-                      dotColor: Color.fromARGB(255, 151, 199, 97),
-                      radius: 8,
-                      expansionFactor: 2,
-                      dotHeight: 8,
-                      dotWidth: 8),
+              // Child 2: The Vertical carousel Indicator
+              Padding(
+                padding: EdgeInsets.only(
+                  top: height * .43,
+                  left: width * .05,
                 ),
-              ),
-            )
-          ],
-        ));
+                child: Transform.rotate(
+                  angle: pi / 2,
+                  child: SmoothPageIndicator(
+                    controller: _controller,
+                    count: 4,
+                    effect: const ExpandingDotsEffect(
+                        activeDotColor: Color.fromARGB(255, 100, 161, 73),
+                        dotColor: Color.fromARGB(255, 151, 199, 97),
+                        radius: 8,
+                        expansionFactor: 2,
+                        dotHeight: 8,
+                        dotWidth: 8),
+                  ),
+                ),
+              )
+            ],
+          )),
+    );
   }
 
   Widget details() {
