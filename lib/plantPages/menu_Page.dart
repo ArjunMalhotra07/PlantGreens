@@ -15,13 +15,6 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
   final _controller = PageController();
-  List<String> assetImages = ['assets/plant1.png', 'assets/plant2.png'];
-  List<String> namesOfPlant = ['Turf Pot Plant', 'Scandinavian Plant'];
-  List<String> descriptionOfPlant = [
-    'Big leaf plant in a turf pot for your home or office decor',
-    'Low maintenance flower in a white ceramic pot'
-  ];
-  List<String> rateOfPlant = ['45.00', '20.00'];
 
   int selectedIndex = 0;
   @override
