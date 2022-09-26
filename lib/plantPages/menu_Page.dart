@@ -27,9 +27,11 @@ class _MenuPageState extends State<MenuPage> {
   int selectedIndex = 0;
   bool showSearchTextField = false;
   String name = "";
+  bool found = true;
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData themeData = Theme.of(context);
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -38,41 +40,47 @@ class _MenuPageState extends State<MenuPage> {
       ),
       child: Scaffold(
           appBar: AppBar(
-            title: Card(
-              child: TextField(
-                decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.search), hintText: 'Search...'),
-                onChanged: (val) {
-                  setState(() {
-                    name = val;
-                  });
-                },
+            title: Theme(
+              data: themeData.copyWith(
+                  inputDecorationTheme: themeData.inputDecorationTheme.copyWith(
+                prefixIconColor:
+                    MaterialStateColor.resolveWith((Set<MaterialState> states) {
+                  if (states.contains(MaterialState.focused)) {
+                    return Colors.green;
+                  }
+                  return Colors.grey;
+                }),
+              )),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 25, right: 35.0),
+                child: TextFormField(
+                  autofocus: false,
+                  decoration: InputDecoration(
+                      isDense: true,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.green, width: 2.0),
+                        borderRadius: BorderRadius.circular(7.0),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.black, width: 2.0),
+                        borderRadius: BorderRadius.circular(7.0),
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        size: 23,
+                      ),
+                      hintText: 'Search...'),
+                  onChanged: (val) {
+                    setState(() {
+                      name = val;
+                    });
+                  },
+                ),
               ),
             ),
             leadingWidth: MediaQuery.of(context).size.width * .25,
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                  onTap: () {
-                    print("Clicked Search");
-                    print(showSearchTextField);
-                    showSearchTextField = !showSearchTextField;
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => TestPage(
-                    //       selectedIndex: selectedIndex,
-                    //     ),
-                    //   ),
-                    // );
-                  },
-                  child: const Icon(
-                    Icons.search,
-                    color: Colors.black,
-                  ),
-                ),
-              )
-            ],
             leading: Container(
               width: MediaQuery.of(context).size.width * .35,
               decoration: const BoxDecoration(
@@ -103,7 +111,7 @@ class _MenuPageState extends State<MenuPage> {
       width: width * .25,
       child: Column(children: [
         SizedBox(
-          height: height * .1,
+          height: height * .07,
         ),
         GestureDetector(
             onTap: () {
@@ -204,7 +212,7 @@ class _MenuPageState extends State<MenuPage> {
                   children: [
                     // Child 1. Green Plants Column.
                     Padding(
-                      padding: const EdgeInsets.only(left: 45.0, top: 50),
+                      padding: const EdgeInsets.only(left: 45.0, top: 25),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
@@ -237,13 +245,6 @@ class _MenuPageState extends State<MenuPage> {
                             print("name -- > ${data['plant_name']}");
                             print("name -- > ${data['pictureofPlant']}");
                             print("****");
-                            // return plantsListRightSide(
-                            //     data['pictureofPlant'],
-                            //     data['plant_name'],
-                            //     data['description'],
-                            //     data['price'],
-                            //     context);
-
                             if (data['plant_name']
                                 .toString()
                                 .toLowerCase()
@@ -254,7 +255,6 @@ class _MenuPageState extends State<MenuPage> {
                                   data['description'],
                                   data['price'],
                                   context);
-                              ;
                             } else {
                               return Container();
                             }
