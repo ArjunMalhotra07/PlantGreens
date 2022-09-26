@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:inheritedwidget/pageView/newPage.dart';
+import 'package:inheritedwidget/plantPages/rightSide.dart';
 import '../auth/login_page.dart';
 import 'details_Page.dart';
 
@@ -25,8 +26,6 @@ class _MenuPageState extends State<MenuPage> {
   int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         leadingWidth: MediaQuery.of(context).size.width * .25,
@@ -56,7 +55,7 @@ class _MenuPageState extends State<MenuPage> {
       ),
       body: Stack(
         children: [
-          Row(children: [left(), right()]),
+          Row(children: [left(), GreenPlants()]),
         ],
       ),
     );
@@ -67,7 +66,6 @@ class _MenuPageState extends State<MenuPage> {
     var width = MediaQuery.of(context).size.width;
     return Container(
       decoration: const BoxDecoration(
-        // borderRadius: BorderRadius.only(bottomLeft: Radius.circular(50)),
         color: Color.fromARGB(255, 87, 141, 72),
       ),
       height: height,
@@ -153,119 +151,6 @@ class _MenuPageState extends State<MenuPage> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget right() {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
-    // Right Container
-    return Container(
-      height: height,
-      color: Colors.white,
-      width: width * .75,
-      child: Column(
-        // 2 children -- 1. Green Plants Column.     2. ListView.Builder
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Child 1. Green Plants Column.
-          Padding(
-            padding: const EdgeInsets.only(left: 45.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  "Green",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 185, 185, 185),
-                      fontSize: 15),
-                ),
-                Text(
-                  "Plants",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontSize: 35),
-                )
-              ],
-            ),
-          ),
-          // Child 2. ListView.builder
-          Expanded(
-            child: ListView.builder(
-                itemCount: 2,
-                itemBuilder: (BuildContext context, int index) {
-                  return plantsListRightSide(
-                      assetImages[index],
-                      namesOfPlant[index],
-                      descriptionOfPlant[index],
-                      rateOfPlant[index]);
-                }),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget plantsListRightSide(String assetImage, name, description, rate) {
-    return Padding(
-      padding: const EdgeInsets.all(45.0),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DetailsPage(
-                          plantPic: assetImage,
-                          name: name,
-                          description: description,
-                          rate: rate,
-                        )),
-              );
-            },
-            child: Image.asset(assetImage)),
-        const SizedBox(
-          height: 35,
-        ),
-        Text(
-          name,
-          style: const TextStyle(
-              fontWeight: FontWeight.bold, color: Colors.black, fontSize: 20),
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        Text(
-          description,
-          style: const TextStyle(
-              color: Color.fromARGB(255, 185, 185, 185), fontSize: 13),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "\$$rate",
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  fontSize: 22),
-            ),
-            const SizedBox(
-              width: 40,
-            ),
-            const Align(
-                alignment: Alignment.center,
-                child: Icon(
-                  Icons.add_circle_outlined,
-                ))
-          ],
-        )
-      ]),
     );
   }
 }
