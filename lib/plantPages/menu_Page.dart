@@ -199,22 +199,24 @@ class _MenuPageState extends State<MenuPage> {
                     ),
                     // Child 2. ListView.builder
                     Expanded(
-                      child: ListView(
-                        children: snapshot.data.docs.map<Widget>((document) {
-                          // print("rate -> ${document['price']}");
-                          // print("description-- > ${document['description']}");
-                          // print("name -- > ${document['plant_name']}");
-                          // print("name -- > ${document['pictureofPlant']}");
-                          // print("****");
-                          return plantsListRightSide(
-                              document['pictureofPlant'],
-                              document['plant_name'],
-                              document['description'],
-                              document['price'],
-                              context);
-                        }).toList(),
-                      ),
-                    ),
+                      child: ListView.builder(
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: (context, index) {
+                            var data = snapshot.data!.docs[index].data()
+                                as Map<String, dynamic>;
+                            print("rate -> ${data['price']}");
+                            print("description-- > ${data['description']}");
+                            print("name -- > ${data['plant_name']}");
+                            print("name -- > ${data['pictureofPlant']}");
+                            print("****");
+                            return plantsListRightSide(
+                                data['pictureofPlant'],
+                                data['plant_name'],
+                                data['description'],
+                                data['price'],
+                                context);
+                          }),
+                    )
                   ],
                 ),
               ),
