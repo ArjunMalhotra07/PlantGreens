@@ -31,12 +31,23 @@ class _MenuPageState extends State<MenuPage> {
     return Scaffold(
         appBar: AppBar(
           leadingWidth: MediaQuery.of(context).size.width * .25,
-          actions: const [
+          actions: [
             Padding(
               padding: const EdgeInsets.only(right: 20.0),
-              child: Icon(
-                Icons.search,
-                color: Colors.black,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => TestPage(
+                        selectedIndex: selectedIndex,
+                      ),
+                    ),
+                  );
+                },
+                child: const Icon(
+                  Icons.search,
+                  color: Colors.black,
+                ),
               ),
             )
           ],
@@ -118,15 +129,9 @@ class _MenuPageState extends State<MenuPage> {
           padding: const EdgeInsets.only(bottom: 50.0),
           child: GestureDetector(
             onTap: () {
-              // setState(() {
-              //   selectedIndex = 0;
-              // });
-              print("Clicked");
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const TestPage(),
-                ),
-              );
+              setState(() {
+                selectedIndex = 0;
+              });
             },
             child: const Icon(
               Icons.home_outlined,

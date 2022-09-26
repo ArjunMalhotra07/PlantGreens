@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class TestPage extends StatefulWidget {
-  const TestPage({Key? key}) : super(key: key);
+  TestPage({Key? key, this.selectedIndex}) : super(key: key);
+  var selectedIndex;
 
   @override
   State<TestPage> createState() => _TestPageState();
@@ -13,22 +14,34 @@ class _TestPageState extends State<TestPage> {
 
   @override
   Widget build(BuildContext context) {
+    final CollectionReference _collectionRef1 =
+        FirebaseFirestore.instance.collection('IndoorPlants');
+
+    final CollectionReference _collectionRef0 =
+        FirebaseFirestore.instance.collection('plantGreens');
+
+    final CollectionReference _collectionRef2 =
+        FirebaseFirestore.instance.collection('collection3');
     return Scaffold(
         appBar: AppBar(
+            backgroundColor: Colors.green,
             title: Card(
-          child: TextField(
-            decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.search), hintText: 'Search...'),
-            onChanged: (val) {
-              setState(() {
-                name = val;
-              });
-            },
-          ),
-        )),
+              child: TextField(
+                decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.search), hintText: 'Search...'),
+                onChanged: (val) {
+                  setState(() {
+                    name = val;
+                  });
+                },
+              ),
+            )),
         body: StreamBuilder<QuerySnapshot>(
-          stream:
-              FirebaseFirestore.instance.collection('plantGreens').snapshots(),
+          stream: widget.selectedIndex == 0
+              ? _collectionRef0.snapshots()
+              : widget.selectedIndex == 1
+                  ? _collectionRef1.snapshots()
+                  : _collectionRef2.snapshots(),
           builder: (context, snapshots) {
             return (snapshots.connectionState == ConnectionState.waiting)
                 ? const Center(
