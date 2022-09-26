@@ -146,12 +146,17 @@ class _DetailsPageState extends State<DetailsPage> {
       padding: EdgeInsets.only(
           left: width * .2, right: width * .2, top: height * .1),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Image.asset(widget.plantPic),
+        Container(
+          height: 250,
+          width: 250,
+          alignment: Alignment.center,
+          child: Image.network(
+            widget.plantPic,
+            fit: BoxFit.fill,
+          ),
+        ),
         const SizedBox(
           height: 35,
-        ),
-        Row(
-          children: [],
         ),
         Text(
           widget.name,

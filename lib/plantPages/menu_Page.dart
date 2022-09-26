@@ -18,18 +18,16 @@ class _MenuPageState extends State<MenuPage> {
     'assets/plant2.png',
     'assets/plant4.jpg'
   ];
-  final CollectionReference _collectionRef =
+
+  final CollectionReference _collectionRef1 =
       FirebaseFirestore.instance.collection('IndoorPlants');
 
-  Future<void> getData() async {
-    // Get docs from collection reference
-    QuerySnapshot querySnapshot = await _collectionRef.get();
-    // Get data from docs and convert map to List
-    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    print(allData);
-    print(allData[0]);
-    print(allData[1]);
-  }
+  final CollectionReference _collectionRef0 =
+      FirebaseFirestore.instance.collection('plantGreens');
+
+  final CollectionReference _collectionRef2 =
+      FirebaseFirestore.instance.collection('collection3');
+  List collection = ['IndoorPlants', 'plantGreens', 'collection3'];
 
   int selectedIndex = 0;
   @override
@@ -64,7 +62,11 @@ class _MenuPageState extends State<MenuPage> {
           elevation: 0,
         ),
         body: StreamBuilder(
-            stream: _collectionRef.snapshots(),
+            stream: selectedIndex == 0
+                ? _collectionRef0.snapshots()
+                : selectedIndex == 1
+                    ? _collectionRef1.snapshots()
+                    : _collectionRef2.snapshots(),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.hasData) {
                 print("Inside");
@@ -104,19 +106,19 @@ class _MenuPageState extends State<MenuPage> {
                         // Child 2. ListView.builder
                         Expanded(
                           child: ListView(
-                            // reverse: true,
                             children:
                                 snapshot.data.docs.map<Widget>((document) {
                               print("rate -> ${document['price']}");
                               print(
                                   "description-- > ${document['description']}");
                               print("name -- > ${document['plant_name']}");
+                              print("name -- > ${document['pictureofPlant']}");
                               print("****");
                               return plantsListRightSide(
-                                  assetImages[1],
+                                  document['pictureofPlant'],
                                   document['plant_name'],
                                   document['description'],
-                                  document['price'].toString(),
+                                  document['price'],
                                   context);
                             }).toList(),
                           ),
@@ -241,12 +243,12 @@ class _MenuPageState extends State<MenuPage> {
                     plantPic: assetImage,
                     name: name,
                     description: description,
-                    rate: rate,
+                    rate: rate.toString(),
                   ),
                 ),
               );
             },
-            child: Image.asset(assetImage)),
+            child: Image.network(assetImage)),
         const SizedBox(
           height: 35,
         ),
