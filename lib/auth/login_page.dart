@@ -138,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
             if (_formKey.currentState!.validate()) {
               var reply = await logIn(
                   emailController.text.trim(), passwordController.text.trim());
-              _timer = Timer(Duration(seconds: 1), () {
+              _timer = Timer(const Duration(seconds: 1), () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text("$reply"),

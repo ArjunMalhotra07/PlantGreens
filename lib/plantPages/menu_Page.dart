@@ -13,12 +13,6 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  List<String> assetImages = [
-    'assets/plant7.jpg',
-    'assets/plant2.png',
-    'assets/plant4.jpg'
-  ];
-
   final CollectionReference _collectionRef1 =
       FirebaseFirestore.instance.collection('IndoorPlants');
 
@@ -27,7 +21,6 @@ class _MenuPageState extends State<MenuPage> {
 
   final CollectionReference _collectionRef2 =
       FirebaseFirestore.instance.collection('collection3');
-  List collection = ['IndoorPlants', 'plantGreens', 'collection3'];
 
   int selectedIndex = 0;
   @override
@@ -61,80 +54,7 @@ class _MenuPageState extends State<MenuPage> {
           backgroundColor: Colors.white,
           elevation: 0,
         ),
-        body: StreamBuilder(
-            stream: selectedIndex == 0
-                ? _collectionRef0.snapshots()
-                : selectedIndex == 1
-                    ? _collectionRef1.snapshots()
-                    : _collectionRef2.snapshots(),
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              if (snapshot.hasData) {
-                print("Inside");
-                return Row(children: [
-                  left(),
-                  Container(
-                    height: height,
-                    color: Colors.white,
-                    width: width * .75,
-                    child: Column(
-                      // 2 children -- 1. Green Plants Column.     2. ListView.Builder
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Child 1. Green Plants Column.
-                        Padding(
-                          padding: const EdgeInsets.only(left: 45.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                "Green",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Color.fromARGB(255, 185, 185, 185),
-                                    fontSize: 15),
-                              ),
-                              Text(
-                                "Plants",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                    fontSize: 35),
-                              )
-                            ],
-                          ),
-                        ),
-                        // Child 2. ListView.builder
-                        Expanded(
-                          child: ListView(
-                            children:
-                                snapshot.data.docs.map<Widget>((document) {
-                              print("rate -> ${document['price']}");
-                              print(
-                                  "description-- > ${document['description']}");
-                              print("name -- > ${document['plant_name']}");
-                              print("name -- > ${document['pictureofPlant']}");
-                              print("****");
-                              return plantsListRightSide(
-                                  document['pictureofPlant'],
-                                  document['plant_name'],
-                                  document['description'],
-                                  document['price'],
-                                  context);
-                            }).toList(),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ]);
-              } else if (snapshot.hasError) {
-                return const Center(
-                  child: Text("Error"),
-                );
-              } else {
-                return const CircularProgressIndicator();
-              }
-            }));
+        body: body(height, width));
   }
 
   Widget left() {
@@ -154,7 +74,6 @@ class _MenuPageState extends State<MenuPage> {
             onTap: () {
               setState(() {
                 selectedIndex = 0;
-                print(selectedIndex);
               });
             },
             child: leftContainerText('Green Plants')),
@@ -165,7 +84,6 @@ class _MenuPageState extends State<MenuPage> {
             onTap: () {
               setState(() {
                 selectedIndex = 1;
-                print(selectedIndex);
               });
             },
             child: leftContainerText('Indoor Plant')),
@@ -196,15 +114,14 @@ class _MenuPageState extends State<MenuPage> {
             child: leftContainerText('Sign Out')),
         const Spacer(),
         Padding(
-          padding: EdgeInsets.only(bottom: 50.0),
+          padding: const EdgeInsets.only(bottom: 50.0),
           child: GestureDetector(
-            // onTap: () {
-            //   Navigator.push(
-            //     context,
-            //     MaterialPageRoute(builder: (context) => PageIndicator()),
-            //   );
-            // },
-            child: Icon(
+            onTap: () {
+              setState(() {
+                selectedIndex = 0;
+              });
+            },
+            child: const Icon(
               Icons.home_outlined,
               color: Colors.white,
               size: 25,
@@ -228,6 +145,81 @@ class _MenuPageState extends State<MenuPage> {
         ),
       ),
     );
+  }
+
+  Widget body(var height, width) {
+    return StreamBuilder(
+        stream: selectedIndex == 0
+            ? _collectionRef0.snapshots()
+            : selectedIndex == 1
+                ? _collectionRef1.snapshots()
+                : _collectionRef2.snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.hasData) {
+            print("Inside");
+            return Row(children: [
+              left(),
+              Container(
+                height: height,
+                color: Colors.white,
+                width: width * .75,
+                child: Column(
+                  // 2 children -- 1. Green Plants Column.     2. ListView.Builder
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Child 1. Green Plants Column.
+                    Padding(
+                      padding: const EdgeInsets.only(left: 45.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            "Green",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 185, 185, 185),
+                                fontSize: 15),
+                          ),
+                          Text(
+                            "Plants",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 35),
+                          )
+                        ],
+                      ),
+                    ),
+                    // Child 2. ListView.builder
+                    Expanded(
+                      child: ListView(
+                        children: snapshot.data.docs.map<Widget>((document) {
+                          print("rate -> ${document['price']}");
+                          print("description-- > ${document['description']}");
+                          print("name -- > ${document['plant_name']}");
+                          print("name -- > ${document['pictureofPlant']}");
+                          print("****");
+                          return plantsListRightSide(
+                              document['pictureofPlant'],
+                              document['plant_name'],
+                              document['description'],
+                              document['price'],
+                              context);
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ]);
+          } else if (snapshot.hasError) {
+            return const Center(
+              child: Text("Error"),
+            );
+          } else {
+            return const CircularProgressIndicator();
+          }
+        });
   }
 
   Widget plantsListRightSide(
