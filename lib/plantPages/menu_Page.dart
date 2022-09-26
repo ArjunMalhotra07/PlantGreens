@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:inheritedwidget/plantPages/testPage.dart';
 import '../auth/login_page.dart';
 import 'details_Page.dart';
@@ -24,49 +25,71 @@ class _MenuPageState extends State<MenuPage> {
       FirebaseFirestore.instance.collection('collection3');
 
   int selectedIndex = 0;
+  bool showSearchTextField = false;
+  String name = "";
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    return Scaffold(
-        appBar: AppBar(
-          leadingWidth: MediaQuery.of(context).size.width * .25,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => TestPage(
-                        selectedIndex: selectedIndex,
-                      ),
-                    ),
-                  );
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+      ),
+      child: Scaffold(
+          appBar: AppBar(
+            title: Card(
+              child: TextField(
+                decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.search), hintText: 'Search...'),
+                onChanged: (val) {
+                  setState(() {
+                    name = val;
+                  });
                 },
-                child: const Icon(
-                  Icons.search,
-                  color: Colors.black,
-                ),
               ),
-            )
-          ],
-          leading: Container(
-            width: MediaQuery.of(context).size.width * .35,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(50)),
-              color: Color.fromARGB(255, 87, 141, 72),
             ),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 35.0),
-              child: Image.asset('assets/menu.png'),
+            leadingWidth: MediaQuery.of(context).size.width * .25,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    print("Clicked Search");
+                    print(showSearchTextField);
+                    showSearchTextField = !showSearchTextField;
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => TestPage(
+                    //       selectedIndex: selectedIndex,
+                    //     ),
+                    //   ),
+                    // );
+                  },
+                  child: const Icon(
+                    Icons.search,
+                    color: Colors.black,
+                  ),
+                ),
+              )
+            ],
+            leading: Container(
+              width: MediaQuery.of(context).size.width * .35,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(50)),
+                color: Color.fromARGB(255, 87, 141, 72),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 35.0),
+                child: Image.asset('assets/menu.png'),
+              ),
             ),
+            centerTitle: true,
+            backgroundColor: Colors.white,
+            elevation: 0,
           ),
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          elevation: 0,
-        ),
-        body: body(height, width));
+          body: body(height, width)),
+    );
   }
 
   Widget left() {
@@ -181,7 +204,7 @@ class _MenuPageState extends State<MenuPage> {
                   children: [
                     // Child 1. Green Plants Column.
                     Padding(
-                      padding: const EdgeInsets.only(left: 45.0),
+                      padding: const EdgeInsets.only(left: 45.0, top: 50),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
@@ -214,12 +237,27 @@ class _MenuPageState extends State<MenuPage> {
                             print("name -- > ${data['plant_name']}");
                             print("name -- > ${data['pictureofPlant']}");
                             print("****");
-                            return plantsListRightSide(
-                                data['pictureofPlant'],
-                                data['plant_name'],
-                                data['description'],
-                                data['price'],
-                                context);
+                            // return plantsListRightSide(
+                            //     data['pictureofPlant'],
+                            //     data['plant_name'],
+                            //     data['description'],
+                            //     data['price'],
+                            //     context);
+
+                            if (data['plant_name']
+                                .toString()
+                                .toLowerCase()
+                                .contains(name.toLowerCase())) {
+                              return plantsListRightSide(
+                                  data['pictureofPlant'],
+                                  data['plant_name'],
+                                  data['description'],
+                                  data['price'],
+                                  context);
+                              ;
+                            } else {
+                              return Container();
+                            }
                           }),
                     )
                   ],

@@ -53,9 +53,7 @@ class _TestPageState extends State<TestPage> {
                     itemBuilder: (context, index) {
                       var data = snapshots.data!.docs[index].data()
                           as Map<String, dynamic>;
-                      if (name == "") {
-                        return Container();
-                      }
+
                       if (data['plant_name']
                           .toString()
                           .toLowerCase()
