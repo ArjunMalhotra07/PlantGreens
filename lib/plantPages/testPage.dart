@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:inheritedwidget/plantPages/details_Page.dart';
 
 class TestPage extends StatefulWidget {
   TestPage({Key? key, this.selectedIndex}) : super(key: key);
@@ -10,7 +11,7 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
-  String name = " ";
+  String name = "";
 
   @override
   Widget build(BuildContext context) {
@@ -52,24 +53,40 @@ class _TestPageState extends State<TestPage> {
                     itemBuilder: (context, index) {
                       var data = snapshots.data!.docs[index].data()
                           as Map<String, dynamic>;
-
+                      if (name == "") {
+                        return Container();
+                      }
                       if (data['plant_name']
                           .toString()
                           .toLowerCase()
-                          .startsWith(name.toLowerCase())) {
-                        return ListTile(
-                          title: Text(
-                            data['plant_name'],
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                color: Colors.black54,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          leading: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(data['pictureofPlant']),
+                          .contains(name.toLowerCase())) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => DetailsPage(
+                                  plantPic: data['pictureofPlant'],
+                                  description: data['description'],
+                                  rate: data['price'].toString(),
+                                  name: data['plant_name'],
+                                ),
+                              ),
+                            );
+                          },
+                          child: ListTile(
+                            title: Text(
+                              data['plant_name'],
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            leading: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(data['pictureofPlant']),
+                            ),
                           ),
                         );
                       } else {
