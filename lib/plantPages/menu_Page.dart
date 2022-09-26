@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:inheritedwidget/plantPages/testPage.dart';
 import '../auth/login_page.dart';
 import 'details_Page.dart';
 
@@ -117,9 +118,15 @@ class _MenuPageState extends State<MenuPage> {
           padding: const EdgeInsets.only(bottom: 50.0),
           child: GestureDetector(
             onTap: () {
-              setState(() {
-                selectedIndex = 0;
-              });
+              // setState(() {
+              //   selectedIndex = 0;
+              // });
+              print("Clicked");
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const TestPage(),
+                ),
+              );
             },
             child: const Icon(
               Icons.home_outlined,
@@ -194,11 +201,11 @@ class _MenuPageState extends State<MenuPage> {
                     Expanded(
                       child: ListView(
                         children: snapshot.data.docs.map<Widget>((document) {
-                          print("rate -> ${document['price']}");
-                          print("description-- > ${document['description']}");
-                          print("name -- > ${document['plant_name']}");
-                          print("name -- > ${document['pictureofPlant']}");
-                          print("****");
+                          // print("rate -> ${document['price']}");
+                          // print("description-- > ${document['description']}");
+                          // print("name -- > ${document['plant_name']}");
+                          // print("name -- > ${document['pictureofPlant']}");
+                          // print("****");
                           return plantsListRightSide(
                               document['pictureofPlant'],
                               document['plant_name'],
