@@ -48,7 +48,15 @@ class _MenuPageState extends State<MenuPage> {
       ),
       body: Stack(
         children: [
-          Row(children: [left(), GreenPlants()]),
+          Row(children: [
+            left(),
+            selectedIndex == 0
+                ? GreenPlants()
+                : selectedIndex == 1
+                    ? IndoorPlants()
+                    : ShapeClose()
+            // GreenPlants()
+          ]),
         ],
       ),
     );
