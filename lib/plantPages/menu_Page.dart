@@ -145,13 +145,42 @@ class _MenuPageState extends State<MenuPage> {
         ),
         GestureDetector(
             onTap: () {
-              FirebaseAuth.instance
-                  .signOut()
-                  .then((value) => Navigator.pushReplacement<void, void>(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginPage()),
-                      ));
+              showDialog(
+                  context: context,
+                  builder: (BuildContext builderContext) {
+                    return AlertDialog(
+                      title: const Text(
+                        "You sure you want to sign out?",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w400),
+                      ),
+                      actions: [
+                        TextButton(
+                          child: const Text(
+                            "Cancel",
+                            style: TextStyle(color: Colors.green),
+                          ),
+                          onPressed: () async {
+                            Navigator.of(builderContext).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: const Text(
+                            "Ok",
+                            style: TextStyle(color: Colors.green),
+                          ),
+                          onPressed: () async {
+                            FirebaseAuth.instance.signOut().then((value) =>
+                                Navigator.pushReplacement<void, void>(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const LoginPage()),
+                                ));
+                          },
+                        )
+                      ],
+                    );
+                  });
             },
             child: leftContainerText('Sign Out')),
         const Spacer(),
