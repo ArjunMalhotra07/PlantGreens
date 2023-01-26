@@ -50,3 +50,26 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+class MyCustomWidget extends StatelessWidget {
+  const MyCustomWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class CustomWidget extends StatefulWidget {
+  CustomWidget({Key? key}) : super(key: key);
+
+  @override
+  State<CustomWidget> createState() => _CustomWidgetState();
+}
+
+class _CustomWidgetState extends State<CustomWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
